@@ -10,6 +10,7 @@
            <i class="ion-ios-loop"></i>Roll Dice
         </button>
         <button class="control hold-btn"
+            v-on:click="holdScore"
         >
             <i class="ion-ios-download-outline"></i>
             Hold
@@ -31,10 +32,15 @@ export default {
 	},
     methods: {
         rollDice() {
-           this.$emit('rollDice');
+            this.$emit('rollDice');
         },
         initNewGame() {
-           this.$emit('initNewGame');
+            this.isPopUpOpen = true;
+            this.$emit('initNewGame');
+        },
+        holdScore() {
+            console.log('ok');
+            this.$emit('holdScore');
         }
     }
 }
@@ -75,5 +81,7 @@ export default {
         top: 500px;
         text-align: center;
         font-weight: 500;
+        color: black;
+        font-weight: bold;
     }
 </style>

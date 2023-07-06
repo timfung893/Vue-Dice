@@ -11,7 +11,7 @@
             <div class="player-score">{{ playerScores[0] }}</div>
             <div class="player-current-box">
                 <div class="player-current-label">Current</div>
-                <div class="player-current-score">11</div>
+                <div class="player-current-score">{{ currentScore }}</div>
             </div>
         </div>
         <div class="player-panel"
@@ -25,7 +25,7 @@
             <div class="player-score">{{ playerScores[1] }}</div>
             <div class="player-current-box">
                 <div class="player-current-label">Current</div>
-                <div class="player-current-score">0</div>
+                <div class="player-current-score">{{ currentScore }}</div>
             </div>
         </div>
     </div>
@@ -61,7 +61,10 @@ export default {
 .player-panel {
     float: left;
     width: 50%;
-
+    transition: all .25s ease;
+}
+.player-panel.active {
+    background-color: rgba(215, 243, 222, 0.5);
 }
 .player-name {
     font-size: 50px;
@@ -85,7 +88,7 @@ export default {
     background: #42b983;
     width: 25%;
     margin: 0 auto 85px;
-        border-radius: 20px;
+    border-radius: 20px;
 
 }
 .player-current-label {

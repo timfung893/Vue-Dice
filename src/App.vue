@@ -16,6 +16,9 @@
             <dices 
                 v-bind:dices="dices"
             />
+            <popUp 
+                v-on:confirmToPlay="confirmToPlay"
+                v-bind:isPopUpOpen="isPopUpOpen"/>
         </div>
 	</div>
 </template>
@@ -24,33 +27,32 @@
 import Players from './components/Players';
 import Controls from './components/Controls';
 import Dices from './components/Dices';
-// import PopupRule from './components/PopupRule';
+import PopUp from './components/PopUp';
 
 export default {
 	name: 'app',
 	data () {
 		return {
             isPlaying: false,
-            activePlayer: 0,
+            activePlayer: null,
             dices: [2, 2],
             currentScore: 0,
             playerScores: [0, 0],
-            finalScore: 10,
+            finalScore: 100,
+            isPopUpOpen: false
 		}
 	},
 
     components: { 
         Players,
         Controls,
-        Dices
+        Dices,
+        PopUp,
     },
 
     methods: {
         initNewGame() {
-            console.log(this);
-            this.currentScore = 0;
-            this.dices = [2, 2];
-            this.finalScore = 0;
+            this.isPopUpOpen = true;
         },
         rollDice() {
             // 0 <= dice <= 6 =>
@@ -66,6 +68,33 @@ export default {
             } else {
                 this.finalScore = number;
             }
+        },
+        confirmToPlay() {
+            this.isPlaying = true;
+            this.isPopUpOpen = false;
+            this.activePlayer = 0;
+            this.dices = [2, 2];
+            this.playerScores = [0, 0];
+            this.currentScore = 0;
+        },
+        nextPlayer() {
+            if (this.activePlayer === 0) {
+                this.activePlayer === 1 
+            } else {
+                this.activePlayer === 0;
+            }
+        },
+        holdScore() {
+            console.log('ok');
+            if (this.isPlaying && !this.isWinner) {
+                let { currentScore, activePlayer, playerScores, dices } = this;
+                playerScores[activePlayer] = dices[0] + dices[1];
+                currentScore += playerScores[activePlayer];
+    
+                if (dices[0] === 1 || dices[1] === 1) {
+                    this.nextPlayer();
+                }
+            }
         }
     },
     computed: {
@@ -74,9 +103,11 @@ export default {
         },
         isWinner() {
             let { finalScore, playerScores } = this;
-            if (playerScores[0] >= finalScore || playerScores[1] >= finalScore) {
-                this.isPlaying = false;
-                return true;
+            if (this.isPlaying) {
+                if (playerScores[0] >= finalScore || playerScores[1] >= finalScore) {
+                    this.isPlaying = false;
+                    return true;
+                }
             }
             return false;
         }
@@ -119,6 +150,6 @@ body {
     background-color: #fff;
     box-shadow: 0px 10px 50px rgba(0, 0, 0, 0.3);
     overflow: hidden;
-    border-radius: 20px;
+    border-radius: 10px;
 }
 </style>

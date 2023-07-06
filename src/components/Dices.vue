@@ -108,9 +108,9 @@ export default {
 .spinner.dice-1 {
   transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
 }
-.spinner.dice-2 {
+ .spinner.dice-2 {
   transform: rotateX(0deg) rotateY(-90deg) rotateZ(0deg);
-}
+} 
 .spinner.dice-3 {
   transform: rotateX(0deg) rotateY(-90deg) rotateZ(90deg);
 }
