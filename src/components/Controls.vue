@@ -17,7 +17,9 @@
 
         </button>
         <input type="number" placeholder="Final Score" class="control final-score"
-            v-on:input="$emit('changeFinalScore', event)"
+            v-on:input="$emit('changeFinalScore', $event)"
+            v-bind:value="finalScore"
+            v-bind:disabled="isPlaying"
         >
     </div>
 </template>
@@ -26,6 +28,11 @@
 
 export default {
 	name: 'controls',
+    props: {
+        isPlaying: { type: Boolean, default: false},
+        finalScore: { type: Number, default: 0},
+        isWinner: { type: Boolean, default: false},
+    },
 	data () {
 		return {
 		}
@@ -39,9 +46,8 @@ export default {
             this.$emit('initNewGame');
         },
         holdScore() {
-            console.log('ok');
             this.$emit('holdScore');
-        }
+        },
     }
 }
 </script>

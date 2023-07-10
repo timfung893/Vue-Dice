@@ -11,7 +11,7 @@
             <div class="player-score">{{ playerScores[0] }}</div>
             <div class="player-current-box">
                 <div class="player-current-label">Current</div>
-                <div class="player-current-score">{{ currentScore }}</div>
+                <div class="player-current-score">{{ activePlayer == 0 ? currentScore : 0 }}</div>
             </div>
         </div>
         <div class="player-panel"
@@ -25,7 +25,7 @@
             <div class="player-score">{{ playerScores[1] }}</div>
             <div class="player-current-box">
                 <div class="player-current-label">Current</div>
-                <div class="player-current-score">{{ currentScore }}</div>
+                <div class="player-current-score">{{ activePlayer == 1 ? currentScore : 0  }}</div>
             </div>
         </div>
     </div>
@@ -48,12 +48,13 @@ export default {
     methods: {
         getPlayerName(index) {
             var defaultName = 'Player ' + (index + 1);
-            if (this.activePlayer === index  && this.isWinner) {
+            var { playerScores, activePlayer, finalScore } = this;
+            if (this.activePlayer === index && playerScores[activePlayer] >= finalScore && this.isWinner) {
                 defaultName = 'Winner!';
             }
             return defaultName;
         }
-    }
+    },
 }
 </script>
 
@@ -63,7 +64,7 @@ export default {
     width: 50%;
     transition: all .25s ease;
 }
-.player-panel.active {
+.player-panel.active, .player-panel.winner  {
     background-color: rgba(215, 243, 222, 0.5);
 }
 .player-name {
@@ -101,5 +102,6 @@ export default {
 }
 .winner .player-name {
     color: #42b983;
+    font-weight: 500;
 }
 </style>

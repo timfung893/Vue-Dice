@@ -3,8 +3,9 @@
         v-bind:class="handlePopUpClass">
         <div class="rules">
             <p class="title">Rules</p>
-            <p>1. If you get dice number 1, you will lose your turn and your points.</p>
-            <p>2. Whoever gets to the final point first is the winner.</p>
+            <p>1. Start the game, roll dice and click 'Hold' to keep your accumulated points.</p>
+            <p>2. If you get dice number 1, you will lose your turn and your points.</p>
+            <p>3. Whoever gets to the final point first is the winner.</p>
             <button 
                 class="confirm"
                 v-on:click="confirmToPlay">

@@ -8,17 +8,22 @@
                 v-bind:isWinner="isWinner"
             />
             <controls 
+                v-bind:isPlaying="isPlaying"
+                v-bind:finalScore="finalScore"
                 v-on:rollDice="rollDice"
                 v-on:initNewGame="initNewGame"
-                v-bind:finalScore="finalScore"
+                v-on:holdScore="holdScore"
+                v-on:changeFinalScore="changeFinalScore"
+                v-bind:isWinner="isWinner"
 
             />
             <dices 
                 v-bind:dices="dices"
             />
             <popUp 
+                v-bind:isPopUpOpen="isPopUpOpen"
                 v-on:confirmToPlay="confirmToPlay"
-                v-bind:isPopUpOpen="isPopUpOpen"/>
+            />
         </div>
 	</div>
 </template>
@@ -38,7 +43,7 @@ export default {
             dices: [2, 2],
             currentScore: 0,
             playerScores: [0, 0],
-            finalScore: 100,
+            finalScore: null,
             isPopUpOpen: false
 		}
 	},
@@ -60,9 +65,24 @@ export default {
             var dice2 = Math.floor(Math.random() * 6) + 1;
 
             this.dices = [dice1, dice2];
+            if (this.isPlaying && !this.isWinner) {
+                if (dice1 === 1 || dice2 === 1) {
+                    let activePlayer = this.activePlayer;
+                    setTimeout(function() {
+                        alert(`Player ${activePlayer + 1} has got dice number 1. How unfortunate!`)
+                    }, 500)
+                    this.nextPlayer();
+                } else {
+                    this.currentScore = this.currentScore + dice1 + dice2;
+                }
+                
+            } else {
+                alert('Please click the new game button');
+            }
         },
         changeFinalScore(e) {
             var number = parseInt(e.target.value);
+            
             if (isNaN(number)) {
                 this.finalScore = '';
             } else {
@@ -78,32 +98,30 @@ export default {
             this.currentScore = 0;
         },
         nextPlayer() {
-            if (this.activePlayer === 0) {
-                this.activePlayer === 1 
-            } else {
-                this.activePlayer === 0;
-            }
+            this.activePlayer = this.activePlayer === 0 ? 1 : 0;
+            this.currentScore = 0;
         },
         holdScore() {
-            console.log('ok');
-            if (this.isPlaying && !this.isWinner) {
-                let { currentScore, activePlayer, playerScores, dices } = this;
-                playerScores[activePlayer] = dices[0] + dices[1];
-                currentScore += playerScores[activePlayer];
-    
-                if (dices[0] === 1 || dices[1] === 1) {
+            if (this.isPlaying) {
+                let { currentScore, activePlayer, playerScores } = this;
+                let oldSCore = playerScores[activePlayer];                
+                this.$set(this.playerScores, activePlayer, oldSCore + currentScore);
+                if (!this.isWinner) {
                     this.nextPlayer();
                 }
+
+            } else {
+                alert('Please click the new game button');
             }
         }
     },
     computed: {
-        getPlayerScore() {
-
-        },
         isWinner() {
             let { finalScore, playerScores } = this;
+            console.log('calculating fs');
+            
             if (this.isPlaying) {
+                console.log('final score', finalScore);
                 if (playerScores[0] >= finalScore || playerScores[1] >= finalScore) {
                     this.isPlaying = false;
                     return true;
